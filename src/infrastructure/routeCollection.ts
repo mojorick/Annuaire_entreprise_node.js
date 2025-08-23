@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { asyncMidlleware } from "./async-Middleware";
 
 type HttpVerb = "get";
 
@@ -60,7 +61,7 @@ setupRouter(router: Router) {
         actions.forEach(a => {
             const action = controller[a.methodName].bind(controller);
             const route = `/${c.prefix}/${a.path}`;
-            router[a.httpVerb](route, action);
+            router[a.httpVerb](route, asyncMidlleware(action));
         });
     });
 }
