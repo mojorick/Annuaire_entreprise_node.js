@@ -1,20 +1,21 @@
 import { Controller } from "../decorators/controller";
 import { Get } from "../decorators/route";
-import type { Response, Request } from "express";
-import * as sqlite from "sqlite3";
+import { EmployeeRepository } from "../models/repositories/employeeRepository";
+import { Employee } from "../models/types/employee";
+import { Repository } from "../models/repositories/repository";
+import { Response, Request } from "express";
 
 @Controller()
 class EmployeeController {
-    @Get()
-    getAll(req: Request, res: Response) {
-        const dbPath = process.env.DB_PATH || "";
-        const db = new sqlite.Database(dbPath);
+  private employeeRepository: Repository<Employee>;
 
-        db.all("SELECT * FROM Employee", [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            res.json(rows);
-        });
-    }
+  constructor() {
+    this.employeeRepository = new EmployeeRepository();
+  }
+
+  @Get()
+  async getAll(req: Request, res: Response) {
+    const employees = await this.employeeRepository.getAll();
+    res.json(employees);
+  }
 }
