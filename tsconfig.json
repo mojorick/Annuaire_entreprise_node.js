@@ -2,6 +2,7 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
@@ -10,7 +11,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "commonjs",
     "target": "ES2018",
-    "types": [],
+    "types": ["reflect-metadata"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

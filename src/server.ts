@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import * as express from "express";
 import { config } from "dotenv";
 import {routeCollection} from "./infrastructure/routeCollection";
@@ -5,6 +6,7 @@ import "./controllers/employeeController";
 import * as bodyParser from "body-parser"
 import * as morgan from "morgan"
 import * as cors from "cors"
+import "./models/repositories/employeeRepository";
 
 config();
 

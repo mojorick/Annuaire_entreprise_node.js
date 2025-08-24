@@ -1,7 +1,9 @@
 import { AbstractRepository } from "./abstractRepository";
 import { Employee } from "../types/employee";
 import { QueryType } from "./queryType";
-
+import { Keys } from "../../keys";
+import { Dependency } from "../../decorators/dependency";
+@Dependency(Keys.EmployeeRepository)
 class EmployeeRepository extends AbstractRepository<Employee> {
     getParams(entity: Employee): any[] {
         
