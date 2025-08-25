@@ -1,5 +1,5 @@
 enum QueryType{
-    GetAll
+    GetAll,Insert
 }
 
 

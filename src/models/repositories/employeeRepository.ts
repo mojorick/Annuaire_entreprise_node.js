@@ -3,8 +3,16 @@ import { Employee } from "../types/employee";
 import { QueryType } from "./queryType";
 import { Keys } from "../../keys";
 import { Dependency } from "../../decorators/dependency";
+import { Repository } from "./repository";
+import { Interface } from "readline";
+
+
+interface EmployeeRepository extends Repository<Employee>{
+    exists(email:string):Promise<boolean>;
+    changeTeam(employeeId:number, teamId:number):Promise<void>;
+}
 @Dependency(Keys.EmployeeRepository)
-class EmployeeRepository extends AbstractRepository<Employee> {
+class EmployeeRepositoryIMPL extends AbstractRepository<Employee> implements EmployeeRepository{
     getParams(entity: Employee): any[] {
         
         return [
@@ -27,9 +35,47 @@ class EmployeeRepository extends AbstractRepository<Employee> {
             FROM Employee as e
             LEFT OUTER JOIN Team as t on e.TeamId = t.Id`
         );
+
+        this.addQuery(QueryType.Insert,
+            `INSERT INTO
+            Employee
+            (
+                FirstName,
+                LastName,
+                Email,
+                TeamId    
+            )
+                VALUES(?,?,?,?)
+            `
+        );
+    }
+
+    async changeTeam(employeeId: number, teamId: number): Promise<void> {
+        const query = `
+            UPDATE Employee
+            SET TeamId = ?
+            WHERE Id = ?
+        `;
+
+        await this.open();
+        await this.run(query, [teamId,employeeId]);
+        await this.close();
+    }
+
+    async exists(email: string): Promise<boolean> {
+        const query = `
+            SELECT COUNT(*) as nb
+            FROM Employee
+            WHERE Email = ?
+        `;
+
+        await this.open();
+        const row = await this.query(query,[email]);
+        await this.close();
+        return row.nb > 0;
     }
 
     
 }
 
-export {EmployeeRepository};
+export type {EmployeeRepository};

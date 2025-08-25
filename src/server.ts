@@ -7,6 +7,8 @@ import * as bodyParser from "body-parser"
 import * as morgan from "morgan"
 import * as cors from "cors"
 import "./models/repositories/employeeRepository";
+import "./controllers/teamController";
+import "./models/repositories/teamRepository";
 
 config();
 
@@ -15,10 +17,10 @@ const port = process.env.PORT || 3000;
 
 const router = express.Router();
 routeCollection.setupRouter(router);
-app.use(router);
-app.use(bodyParser.json);
+app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(cors());
+app.use(router);
 
 app.listen(
     port,
